@@ -34,7 +34,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-image = cv2.imread('test.jpg')
+image = cv2.imread('../rsc/test.jpg')
 
 # 행과 열 정보만 저장합니다.
 height, width = image.shape[:2]
@@ -44,3 +44,4 @@ dst = cv2.warpAffine(image, M, (width, height))
 
 plt.imshow(cv2.cvtColor(dst, cv2.COLOR_BGR2RGB))
 plt.show()
+
