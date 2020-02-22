@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-cap = cv2.VideoCapture('red_road_04.mp4')
+cap = cv2.VideoCapture('road_04.mp4')
 
 while(cap.isOpened()):
     ret, frame = cap.read()
@@ -11,7 +11,7 @@ while(cap.isOpened()):
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
         # red 영역의 from ~ to
-        lower_red_1 = np.array([150, 10, 10])
+        lower_red_1 = np.array([170, 10, 10])
         upper_red_1 = np.array([255, 255, 255])
 
         lower_red_2 = np.array([0, 10, 10])
