@@ -1,6 +1,6 @@
+# 출처 : https://yeowool0217.tistory.com/557  
 import cv2
 import numpy as np
-
 
 def roi(equ_frame, vertices):
     # blank mask:
@@ -10,7 +10,6 @@ def roi(equ_frame, vertices):
     # now only show the area that is the mask
     masked = cv2.bitwise_and(equ_frame, mask)
     return masked
-
 
 video = cv2.VideoCapture("rsc/red_road_01.mp4")
 while True:
@@ -28,21 +27,21 @@ while True:
     equ_frame = cv2.equalizeHist(gray_frame)
 
     # 소벨
-    """
+
     sobelX = np.array([[0, 1, 2],
-                            [-1, 0, 1],
-                            [-2, -1, 0]])
+                       [-1, 0, 1],
+                       [-2, -1, 0]])
     gx = cv2.filter2D(equ_frame, cv2.CV_32F, sobelX)
     sobelY = np.array([[-2, -1, 0],
-                            [-1, 0, 1],
-                            [0, 1, 2]])
+                       [-1, 0, 1],
+                       [0, 1, 2]])
     gy = cv2.filter2D(equ_frame, cv2.CV_32F, sobelY)
     mag   = cv2.magnitude(gx, gy)
-    """
-    # edges_frame = cv2.normalize(mag, 0, 255, cv2.NORM_MINMAX)
+
+    edges_frame = cv2.normalize(mag, 0, 255, cv2.NORM_MINMAX)
 
     # 캐니
-    edges_frame = cv2.Canny(equ_frame, 100, 200)  # canny를 사용하여 에지검출
+    # edges_frame = cv2.Canny(equ_frame, 100, 200)  # canny를 사용하여 에지검출
 
     # ROI영역설정
     height, width = frame.shape[:2]  # 이미지 높이, 너비
