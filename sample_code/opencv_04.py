@@ -2,7 +2,7 @@
 import cv2
 import matplotlib.pyplot as plt
 
-image_1 = cv2.imread('../rsc/test.jpg')
+image_1 = cv2.imread('test.jpg')
 image_2 = cv2.imread('lena.png')
 
 result = cv2.add(image_1, image_2)

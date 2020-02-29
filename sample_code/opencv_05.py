@@ -25,7 +25,7 @@
 import cv2
 import matplotlib.pyplot as plt
 
-image = cv2.imread('../rsc/test.jpg', cv2.IMREAD_GRAYSCALE)
+image = cv2.imread('test.jpg', cv2.IMREAD_GRAYSCALE)
 
 ret, thres1 = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
 thres2 = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 21, 3)
