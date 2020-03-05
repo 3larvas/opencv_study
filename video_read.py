@@ -10,19 +10,15 @@ R_LINE_UP_ROW = 255
 R_LINE_DN_COL = 460
 R_LINE_DN_ROW = 300
 
-cap = cv2.VideoCapture('rsc/red_road_03.mp4')
+cap = cv2.VideoCapture('rsc/red_road_01.mp4')
 
 while(cap.isOpened()):
     ret, frame = cap.read()
     frame = cv2.resize(frame, (640, 360))
     if ret:
         # 현재 차선 가이드라인(고정)
-        # frame = cv2.line(frame, (L_LINE_UP_COL, L_LINE_UP_ROW), (L_LINE_DN_COL, L_LINE_DN_ROW), (255, 0, 0), 3)
-        # frame = cv2.line(frame, (R_LINE_UP_COL, R_LINE_UP_ROW), (R_LINE_DN_COL, R_LINE_DN_ROW), (255, 0, 0), 3)
-
-        frame = cv2.GaussianBlur(frame, (9, 9), 0)
-
-
+        frame = cv2.line(frame, (L_LINE_UP_COL, L_LINE_UP_ROW), (L_LINE_DN_COL, L_LINE_DN_ROW), (255, 0, 0), 3)
+        frame = cv2.line(frame, (R_LINE_UP_COL, R_LINE_UP_ROW), (R_LINE_DN_COL, R_LINE_DN_ROW), (255, 0, 0), 3)
         # BGR->HSV로 변환
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
@@ -37,7 +33,6 @@ while(cap.isOpened()):
         mask_1 = cv2.inRange(hsv, lower_red_1, upper_red_1)
         mask_2 = cv2.inRange(hsv, lower_red_2, upper_red_2)
         result_mask = cv2.add(mask_1, mask_2)
-
         cnt = 0
         cnt_255 = 0
         for i in range(240, 380):
@@ -46,6 +41,7 @@ while(cap.isOpened()):
                 if(result_mask[j][i]==255): cnt_255 += 1
         msg =  str(round(cnt_255 * 100 / cnt,2)) + "%"
         cv2.putText(result_mask, msg, (30, 30), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 2)
+
 
         # bit연산자를 통해서 red영역만 남김.
         res = cv2.bitwise_and(frame, frame, mask=result_mask)
