@@ -7,7 +7,7 @@ def roi(equ_frame, vertices):
     masked = cv2.bitwise_and(equ_frame, mask)
     return masked
 
-video = cv2.VideoCapture("rsc/mission_left_right.mp4")
+video = cv2.VideoCapture("rsc/mission_ride.mp4")
 # video = cv2.VideoCapture("rsc/mission_bus_lane.mp4")
 # video = cv2.VideoCapture("rsc/mission_full.mp4")
 
