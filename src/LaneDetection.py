@@ -6,7 +6,7 @@ import utlis
 
 cameraFeed= False
 # videoPath = 'project_video.mp4'
-videoPath = '../rsc/mission_ride.mp4'
+videoPath = '../rsc/mission_left_right.mp4'
 cameraNo= 1
 frameWidth= 640
 frameHeight = 480

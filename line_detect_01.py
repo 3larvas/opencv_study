@@ -7,13 +7,43 @@ def roi(equ_frame, vertices):
     masked = cv2.bitwise_and(equ_frame, mask)
     return masked
 
-video = cv2.VideoCapture("rsc/mission_ride.mp4")
+def perspective_warp(img,
+                     dst_size=(1280, 720),
+                     src=np.float32([(0.43,0.65),(0.58,0.65),(0.1,1),(1,1)]),
+                     dst=np.float32([(0,0), (1, 0), (0,1), (1,1)])):
+    img_size = np.float32([(img.shape[1],img.shape[0])])
+    src = src* img_size
+    # For destination points, I'm arbitrarily choosing some points to be
+    # a nice fit for displaying our warped result
+    # again, not exact, but close enough for our purposes
+    dst = dst * np.float32(dst_size)
+    # Given src and dst points, calculate the perspective transform matrix
+    M = cv2.getPerspectiveTransform(src, dst)
+    # Warp the image using OpenCV warpPerspective()
+    warped = cv2.warpPerspective(img, M, dst_size)
+
+    return warped
+
+video = cv2.VideoCapture("rsc/mission_left_right.mp4")
 # video = cv2.VideoCapture("rsc/mission_bus_lane.mp4")
 # video = cv2.VideoCapture("rsc/mission_full.mp4")
 
 while True:
     ret, orig_frame = video.read()
+
     frame = cv2.GaussianBlur(orig_frame,(5, 5), 0)
+    height, width = frame.shape[:2]
+
+    widthTop = 28
+    heightTop = 60
+    widthBottom = 1
+    heightBottom = 80
+    perspective_val = src = np.float32([(widthTop / 100, heightTop / 100), (1 - (widthTop / 100), heightTop / 100),
+                                        (widthBottom / 100, heightBottom / 100),
+                                        (1 - (widthBottom / 100), heightBottom / 100)])
+    frame = perspective_warp(frame, dst_size=(width, height), src=perspective_val)
+    # line_img_frame = perspective_warp(frame, dst_size=(width, height), src=perspective_val)
+
     frame = cv2.pyrDown(frame)
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
@@ -36,9 +66,10 @@ while True:
     b_edges = cv2.Canny(b_mask, 100, 200)
 
     # set ROI
-    height, width = frame.shape[:2]
-    vertices1 = np.array([[(0 , height*0.8), (width * 0.3 , height * 0.6), (width * 0.5, height * 0.6), (width * 0.3, height)]], dtype=np.int32)
-    vertices2 = np.array([[(width * 0.7, height), (width * 0.5, height * 0.6), (width * 0.7, height * 0.6), (width, height*0.8)]],dtype=np.int32)
+    # vertices1 = np.array([[(0 , height*0.8), (width * 0.3 , height * 0.6), (width * 0.5, height * 0.6), (width * 0.3, height)]], dtype=np.int32)
+    # vertices2 = np.array([[(width * 0.7, height), (width * 0.5, height * 0.6), (width * 0.7, height * 0.6), (width, height*0.8)]],dtype=np.int32)
+    vertices1 = np.array([[(0 , height), (0, 0),(width * 0.5, 0), (width * 0.3, height)]], dtype=np.int32)
+    vertices2 = np.array([[(width, 0), (width, height), (width * 0.7, height), (width*0.5, 0)]],dtype=np.int32)
     w_roi_frame1 = roi(w_edges, [vertices1])
     w_roi_frame2 = roi(w_edges, [vertices2])
     y_roi_frame1 = roi(y_edges, [vertices1])
@@ -83,9 +114,14 @@ while True:
     cv2.imshow("w_roi_frame", w_roi_frame)
     cv2.imshow("y_roi_frame", y_roi_frame)
     cv2.imshow("b_roi_frame", b_roi_frame)
+
     roi_frame = cv2.add(w_roi_frame, y_roi_frame)
     roi_frame = cv2.add(roi_frame, b_roi_frame)
     cv2.imshow("roi_frame", roi_frame)
+
+
+    # cv2.imshow("perspective_frame", img_frame)
+    # cv2.imshow("line_perspective_frame", line_img_frame)
     key = cv2.waitKey(1)
     if key == 27:
         break

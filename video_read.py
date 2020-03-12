@@ -1,14 +1,6 @@
 import cv2
 import numpy as np
-L_LINE_UP_COL = 240
-L_LINE_UP_ROW = 255
-L_LINE_DN_COL = 160
-L_LINE_DN_ROW = 300
 
-R_LINE_UP_COL = 380
-R_LINE_UP_ROW = 255
-R_LINE_DN_COL = 460
-R_LINE_DN_ROW = 300
 
 cap = cv2.VideoCapture('rsc/red_road_01.mp4')
 
