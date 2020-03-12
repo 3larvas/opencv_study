@@ -90,4 +90,4 @@ while True:
     if key == 27:
         break
 video.release()
-cv2.destroyAllWindows()
+cv2.destroyAllWindows() 
